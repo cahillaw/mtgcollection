@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp"
 import PrivateRoute from "./components/PrivateRoute"
 
 import { AuthProvider } from "./contexts/AuthContext"
+import ForgotPassword from "./pages/ForgotPassword";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route exact path = "/" component={HomePage} />
             <Route path = "/sign-in" component={SignIn} />
             <Route path ="/sign-up" component={SignUp}/>
+            <Route path ="/forgot-password" component={ForgotPassword}/>
             <PrivateRoute exact path = "/portfolio" component={Portfolio} />
             <Redirect to ="/"/>
           </Switch>

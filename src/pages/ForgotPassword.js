@@ -3,11 +3,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+
 import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,8 +19,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-      MTGCollection.io
+      <Link color="inherit" href="/">
+        MTGCollection.io
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -53,16 +52,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SignUp() {
-  const classes = useStyles();
+export default function ForgotPassword() {
+  const classes = useStyles()
   const history = useHistory()
-  const { signup, currentUser } = useAuth()
+
+  const { resetPassword } = useAuth()
 
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordConf, setPasswordConf] = useState('')
 
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit() {
@@ -74,34 +73,16 @@ export default function SignUp() {
         return setError('Invalid email adress')
     }
 
-    if(password !== passwordConf) {
-        return setError('Passwords do not match')
-    }
-
-    if(password === '') {
-        return setError('Password is empty')
-    }
-
-    if(passwordConf === '') {
-        return setError('Password confirmation is empty')
-    }
-
-    if(password.length < 6) {
-        return setError('Password must be 6 digits minimum.')
-    }
-
     try {
         setError('')
         setLoading(true)
-        await signup(email, password, passwordConf)
-        console.log('signup woulda occured')
-        history.push('/portfolio')
+        await resetPassword(email)
+        setSuccess("Reset email has been sent.")
     } catch (error) {
-      setError(error.message)
+        setError(error.message)
     }
     setLoading(false)
   }
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -110,71 +91,47 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Reset Password
         </Typography>
         {error && <Alert severity="error" className={classes.alert} >{error}</Alert>}
+        {success && <Alert severity="success" className={classes.alert} >{success}</Alert>}
         <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                onChange={(e)=>{setEmail(e.target.value)}}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                onChange={(e)=>{setPassword(e.target.value)}}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password-conf"
-                label="Confirm Password"
-                type="password"
-                id="password-conf"
-                onChange={(e)=>{setPasswordConf(e.target.value)}}
-              />
-            </Grid>
-          </Grid>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={(e)=>{setEmail(e.target.value)}}
+          />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            disabled={loading}
             className={classes.submit}
+            disabled={loading}
             onClick={(e) => {
-                e.preventDefault()
-                handleSubmit()
-            }}
+              e.preventDefault()
+              handleSubmit()
+          }}
           >
-            Sign Up
+            Reset Password
           </Button>
           <Grid container justifyContent="center">
             <Grid item>
               <Link href="/sign-in" variant="body2">
-                Already have an account? Sign in
+                Sign in
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
+      <Box mt={2}>
         <Copyright />
       </Box>
     </Container>

@@ -88,8 +88,8 @@ export default function SignIn() {
         await login(email, password)
         history.push('/portfolio')
         console.log('signup woulda occured')
-    } catch {
-        setError('Failed to log in')
+    } catch (error) {
+        setError(error.message)
     }
     setLoading(false)
   }
@@ -150,7 +150,7 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="/forgot-password" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
