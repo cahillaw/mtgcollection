@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext"
 
 import NavBar from "../components/NavBar"
 import CollectionPriceHistory from "../components/CollectionPriceHistory"
+import CardsTable from "../components/CardsTable"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Portfolio() {
     const { currentUser } = useAuth()
     const classes = useStyles();
-    const [collectionData, setCollectioData] = useState("")
+    const [collectionData, setCollectionData] = useState("")
 
     let testBody = {"identifiers": [{"set":"THB", "name":"Mantle of the wolf"},{"set":"UGL", "name":"Miss Demeanor"},{"set":"M19", "name":"Respeldent Angel"},{"set":"SOI", "name":"Angel of Deliverance"},{"set":"BBD", "name":"Apocalypse Hydra"},{"set":"BFZ", "name":"Barrage Tyrant"},{"set":"RIX", "name":"Form of the Dinosaur"},{"set":"M20", "name":"Riddlemaster Sphinx"},{"set":"EMN", "name":"Mausoleum Wanderer"},{"set":"ORI", "name":"Harbinger of the Tides"}]}
 
@@ -55,7 +56,7 @@ export default function Portfolio() {
             try {
                 let data = await response.json()
                 console.log(data)
-                setCollectioData(data)
+                setCollectionData(data)
             } catch (error) {
                 console.log(error)
             }
@@ -109,6 +110,11 @@ export default function Portfolio() {
                         })}
                         </Grid> : null}
                 </Grid>
+                <Grid>
+                    <CardsTable collectionData={collectionData}></CardsTable>
+                </Grid>
+                <br></br>
+                <br></br>
             </Grid>
         </div>
     )
