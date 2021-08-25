@@ -43,8 +43,8 @@ export default function NavBar() {
                   </span>
           </Navbar.Brand>
           <Nav className="mr-auto">
-              <Nav.Link href="/about">
-                <span className={classes.text}>About
+              <Nav.Link href="/transactions">
+                <span className={classes.text}>Transactions
                   </span>
               </Nav.Link>
           </Nav>{

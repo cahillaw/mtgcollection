@@ -1,0 +1,42 @@
+{ 
+    "transactions": [
+        {
+            "type": "buy",
+            "title": "8/24 TCGPlayer Order",
+            "cardsAdded": [
+                {
+                    "id": "21312312",
+                    "quantity": 2,
+                    "price": 2.15,
+                    "foil": false
+                },
+                {
+                    "id": "29291912",
+                    "quantity": 1,
+                    "price": 13.21,
+                    "foil": true
+                }
+            ],
+            "datetime": "8/24/21 1:04 AM"
+        },
+        {
+            "type": "buy",
+            "title": "8/25 TCGPlayer Order",
+            "cardsAdded": [
+                {
+                    "id": "91112312",
+                    "quantity": 1,
+                    "price": 3.33,
+                    "foil": false
+                },
+                {
+                    "id": "56155555",
+                    "quantity": 2,
+                    "price": 1.55,
+                    "foil": true
+                }
+            ],
+            "datetime": "8/25/21 1:20 PM"
+        }
+    ]
+}
