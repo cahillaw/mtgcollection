@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PageWrapper from '../components/PageWrapper'
 import { Grid, makeStyles, Card, CardContent, Typography } from '@material-ui/core'
+import Transaction from "../components/Transaction"
 
 const transactionData = require("../transactiondatatest.json")
 
@@ -10,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
        marginTop: 15
    },
    pastTransactions: {
-        border: "1px solid black",
+        //border: "1px solid black",
         marginTop: 15
    }
 }));
@@ -27,14 +28,7 @@ export default function Transactions() {
                 Past Transactions
                 {console.log(transactions)}
                 {transactions.map((transaction) => {
-                    console.log(transaction)
-                    return <Card>
-                        <CardContent>
-                            <Typography variant="h5" component="h2">
-                                {transaction.title}
-                            </Typography>
-                        </CardContent>
-                    </Card>
+                    return <Transaction data={transaction}></Transaction>
                 })}
             </Grid>
         </PageWrapper>
