@@ -1,6 +1,64 @@
 { 
     "transactions": [
         {
+            "type": "Trade",
+            "title": "FNM Trade 1",
+            "cardsAdded": [
+                {
+                    "id": "dfe51ad5-d786-4de3-aa39-0f5fd7e73ec6",
+                    "quantity": 1,
+                    "price": 3.33,
+                    "isFoil": false
+                },
+                {
+                    "id": "fb179448-5e1f-4ef3-858c-ba7a9ea05a78",
+                    "quantity": 1,
+                    "price": 0.99,
+                    "isFoil": true
+                },
+                {
+                    "id": "93efa32a-9c89-424c-a132-d170c5a6297c",
+                    "quantity": 2,
+                    "price": 1.99,
+                    "isFoil": false
+                }
+            ],
+            "cardsRemoved": [
+                {
+                    "id": "78e0d3d9-8c28-46d7-9fab-c115e6c8682f",
+                    "quantity": 1,
+                    "price": 3.98,
+                    "isFoil": false
+                },
+                {
+                    "id": "5bd58ec4-34a9-4fc2-b057-438492e2e06e",
+                    "quantity": 2,
+                    "price": 2.00,
+                    "isFoil": true
+                }
+            ],
+            "datetime": "8/24/21 1:20 PM"
+        },
+        {
+            "type": "Sell",
+            "title": "8/28 Ebay Sale",
+            "cardsRemoved": [
+                {
+                    "id": "de766c12-eb2c-466a-8630-8242a153eb1f",
+                    "quantity": 1,
+                    "price": 3.98,
+                    "isFoil": false
+                },
+                {
+                    "id": "1acb4d61-f308-423f-8cf6-eb057b994d01",
+                    "quantity": 2,
+                    "price": 2.00,
+                    "isFoil": true
+                }
+            ],
+            "datetime": "8/24/21 1:20 PM"
+        },
+        {
             "type": "Buy",
             "title": "8/25 TCGPlayer Order",
             "cardsAdded": [
@@ -8,13 +66,49 @@
                     "id": "127bb737-85ed-4de3-9a1d-ec789d54b7cd",
                     "quantity": 2,
                     "price": 2.15,
-                    "foil": false
+                    "isFoil": false
                 },
                 {
                     "id": "3828babb-471b-4a0a-8e92-3102c4d0319e",
                     "quantity": 1,
                     "price": 13.21,
-                    "foil": true
+                    "isFoil": true
+                },
+                {
+                    "id": "78e0d3d9-8c28-46d7-9fab-c115e6c8682f",
+                    "quantity": 1,
+                    "price": 10.22,
+                    "isFoil": false
+                },
+                {
+                    "id": "bc6ea08d-7991-4a57-a1e3-abd508426970",
+                    "quantity": 3,
+                    "price": 3.32,
+                    "isFoil": true
+                },
+                {
+                    "id": "584dfb52-4a6c-4a33-9ae1-12227b938f9a",
+                    "quantity": 1,
+                    "price": 44.12,
+                    "isFoil": false
+                },
+                {
+                    "id": "07989612-d3c4-44f7-b1ee-1ddf2d93a7da",
+                    "quantity": 1,
+                    "price": 24.11,
+                    "isFoil": false
+                },
+                {
+                    "id": "5bd58ec4-34a9-4fc2-b057-438492e2e06e",
+                    "quantity": 1,
+                    "price": 89.92,
+                    "isFoil": true
+                },
+                {
+                    "id": "b9fa85f6-2a97-470e-88bb-b5ada6d64e80",
+                    "quantity": 1,
+                    "price": 1.99,
+                    "isFoil": false
                 }
             ],
             "datetime": "8/25/21 1:04 AM"
@@ -27,13 +121,13 @@
                     "id": "de766c12-eb2c-466a-8630-8242a153eb1f",
                     "quantity": 1,
                     "price": 3.33,
-                    "foil": false
+                    "isFoil": false
                 },
                 {
                     "id": "1acb4d61-f308-423f-8cf6-eb057b994d01",
                     "quantity": 2,
                     "price": 1.55,
-                    "foil": true
+                    "isFoil": true
                 }
             ],
             "datetime": "8/24/21 1:20 PM"

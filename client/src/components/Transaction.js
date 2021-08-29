@@ -16,10 +16,6 @@ export default function Transaction({
     data,
 }) {
     const classes = useStyles();
-    let idArray = []
-    data.cardsAdded.forEach((card)=>{
-        idArray.push(card.id)
-    })
     
     return (
         <Card variant="outlined" className={classes.container}>
@@ -33,11 +29,8 @@ export default function Transaction({
                 <Typography color="textSecondary">
                     {data.type}
                 </Typography>
-                <Typography>
-                    Added
-                </Typography>
-                <CardRow idArray={idArray}></CardRow>
-
+                {data.cardsAdded &&<CardRow data={data.cardsAdded} type={true}></CardRow>}
+                {data.cardsRemoved &&<CardRow data={data.cardsRemoved} type={false}></CardRow>}
             </CardContent>
         </Card>
     )
