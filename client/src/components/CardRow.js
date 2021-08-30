@@ -1,7 +1,7 @@
 import { Grid, makeStyles, Card, Chip, Typography } from '@material-ui/core'
 import React, { useState, useEffect } from 'react'
 import { getBulkCards } from "../functions/Scryfall"
-
+import foilOverlay from "../images/foilOverlay.png"
 const useStyles = makeStyles((theme) => ({
     row: {
         overflowX: "auto",
@@ -28,6 +28,15 @@ const useStyles = makeStyles((theme) => ({
     media: {
         width: 205,
         borderRadius: 10,
+    },
+    foilOverlay: {
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        mixBlendMode: "multiply"
+    },
+    foilwrapper: {
+        position: "relative!important"
     },
     item: {
         margin: 11,
@@ -88,7 +97,9 @@ export default function CardRow({
                 {cardData !== '' && cardData.map((card) => {
                     return <Grid item className={classes.item}>
                         <Grid container direction="column">
-                            <div className={classes.foilwrapper}><img src={card.image_uris.normal} className={classes.media} alt="recipe thumbnail"/></div>
+                            <div className={classes.foilwrapper}>
+                                {card.isFoil && <img src={foilOverlay} className={classes.foilOverlay} alt="foiloverlay"></img>}
+                                <img src={card.image_uris.normal} className={classes.media} alt="recipe thumbnail"/></div>
                             <div className={classes.infobar}>
                                 <span className={classes.quantity}>x{card.quantity}</span>
                                 <span className={classes.price}>${card.price}</span>
