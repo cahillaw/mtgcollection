@@ -10,10 +10,19 @@ import PrivateRoute from "./components/PrivateRoute"
 
 import { AuthProvider } from "./contexts/AuthContext"
 import ForgotPassword from "./pages/ForgotPassword";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+
+
+const theme = createTheme({
+  palette: {
+
+  },
+})
 
 
 function App() {
   return (
+    <ThemeProvider theme={theme}>
       <Router>
         <AuthProvider>
           <Switch>
@@ -27,6 +36,8 @@ function App() {
           </Switch>
         </AuthProvider>
       </Router>
+      </ThemeProvider>
+
   );
 }
 
