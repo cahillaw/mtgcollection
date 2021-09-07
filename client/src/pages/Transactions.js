@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Transaction from "../components/Transaction"
 import { getAutoCompleteResults, getCardByName } from "../functions/Scryfall"
 import foilOverlay from "../images/foilOverlay.png"
+import TransactionTable from '../components/TransactionTable';
 
 const transactionData = require("../transactiondatatest.json")
 
@@ -68,13 +69,13 @@ export default function Transactions() {
     const [currentQuery, setCurrentQuery] = useState(null)
     const [selectedCardInfo, setSelectedCardInfo] = useState('')
 
+    const [added, setAdded] = useState(true)
     const [printing, setPrinting] = useState('')
     const [isFoil, setIsFoil] = useState(false)
-    const [quantity, setQuantity] = useState(0)
+    const [quantity, setQuantity] = useState(1)
     const [price, setPrice] = useState(0)
 
-    const [cardsAdded, setCardsAdded] = useState([])
-    const [cardsRemoved, setCardsRemoved] = useState([])
+    const [cards, setCards] = useState([])
 
     //if the printing updates, update the foil and price info
     useEffect(() => {
@@ -92,11 +93,9 @@ export default function Transactions() {
     useEffect(() => {
         if(printing !== "") {
             if(isFoil) {
-                setIsFoil(!isFoil)
-                setPrice(printing.prices.usd)
-            } else {
-                setIsFoil(isFoil)
                 setPrice(printing.prices.usd_foil)
+            } else {
+                setPrice(printing.prices.usd)
             }   
         }
     },[isFoil])
@@ -208,13 +207,13 @@ export default function Transactions() {
                                                 />
                                                 <Button onClick={() => {
                                                     let entry = {
+                                                        added: added,    
                                                         printingInfo: printing,
                                                         quantity: quantity,
                                                         price: price,
                                                         foil: isFoil
                                                     }       
-                                                    console.log(entry)
-                                                    setCardsAdded([entry])
+                                                    setCards([...cards, entry])
                                                 }}>Add Card</Button>
                                                 </Grid>
                                             </Grid>
@@ -222,8 +221,10 @@ export default function Transactions() {
                                     </Grid>}
                             </Grid>
                             <Grid item xs={6}>
-                                <AddIcon className={classes.addIcon}></AddIcon>
-                                <div>{JSON.stringify(cardsAdded)}</div>
+                                {cards.length > 0 && <div>
+                                    <Typography variant="h5" component="h2">Cards Changed</Typography>
+                                    <TransactionTable data={cards}></TransactionTable>
+                                </div>}
                             </Grid>
                         </Grid>
                     </CardContent>
