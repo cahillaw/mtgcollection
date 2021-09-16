@@ -109,7 +109,7 @@ export default function Transactions() {
                 <Card variant="outlined" className={classes.addCardsContainer}>
                     <CardContent>
                         <Grid container direction="row">
-                            <Grid item xs={6}>
+                            <Grid item xs={5}>
                                 <Grid container direction="row">
                                     <Grid item xs={8}>
                                         <Autocomplete
@@ -220,7 +220,7 @@ export default function Transactions() {
                                         </Grid>
                                     </Grid>}
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={7}>
                                 {cards.length > 0 && <div>
                                     <Typography variant="h5" component="h2">Cards Changed</Typography>
                                     <TransactionTable data={cards}></TransactionTable>

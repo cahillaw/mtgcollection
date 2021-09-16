@@ -2,6 +2,7 @@ import React from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import foilOverlay from "../images/foilOverlay.png"
 
 const useStyles = makeStyles((theme) => ({
   popover: {
@@ -10,14 +11,25 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(1),
   },
-  image: {
-      height: 300
-  }
+  media: {
+      width: 205
+  },
+  foilOverlay: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    mixBlendMode: "multiply"
+  },  
+  foilwrapper: {
+    position: "relative!important",
+    width: 205
+  },
 }));
 
 export default function CardImagePopover({
     name,
-    imageSrc
+    imageSrc,
+    foil
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -62,7 +74,10 @@ export default function CardImagePopover({
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <img src={imageSrc} alt={name + "image"} className={classes.image}></img>
+         <div className={classes.foilwrapper}>
+            {foil && <img src={foilOverlay} className={classes.foilOverlay} alt="foiloverlay"></img>}
+            <img src={imageSrc} className={classes.media} alt="selected card"></img>
+        </div>
       </Popover>
     </div>
   );
