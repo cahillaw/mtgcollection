@@ -81,7 +81,7 @@ export default function CardRow({
             setTotalValue(total)
         }
         fetchData()
-    }, [])
+    }, data)
 
     return (
         <Grid>
@@ -98,7 +98,7 @@ export default function CardRow({
                     return <Grid item className={classes.item}>
                         <Grid container direction="column">
                             <div className={classes.foilwrapper}>
-                                {card.isFoil && <img src={foilOverlay} className={classes.foilOverlay} alt="foiloverlay"></img>}
+                                {card.foil && <img src={foilOverlay} className={classes.foilOverlay} alt="foiloverlay"></img>}
                                 <img src={card.image_uris.normal} className={classes.media} alt="recipe thumbnail"/></div>
                             <div className={classes.infobar}>
                                 <span className={classes.quantity}>x{card.quantity}</span>

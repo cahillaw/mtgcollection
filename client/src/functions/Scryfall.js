@@ -6,7 +6,6 @@ export const getBulkCards = async (idArray) => {
     idArray.forEach(element => {
         data.identifiers.push({"id": element})
     });
-    console.log(data)
     try {
         let response = await fetch(url, {
             method: 'POST',
@@ -18,7 +17,6 @@ export const getBulkCards = async (idArray) => {
 
         try {
             let data = await response.json()
-            console.log(data)
             return data
         } catch (error) {
             console.log(error)
@@ -39,7 +37,6 @@ export const getAutoCompleteResults = async (query) => {
         })
         try {
             let data = await response.json()
-            console.log(data)
             return data
         } catch (error) {
             console.log(error)

@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import firebase, { auth } from "../firebase"
+import "firebase/firestore"
+
+import { addTransaction, getTransactions } from '../functions/DbFunctions'
+import { getAutoCompleteResults, getCardByName } from "../functions/Scryfall"
+
 import PageWrapper from '../components/PageWrapper'
 import { Grid, makeStyles, Card, CardContent, Typography, Button, TextField, MenuItem, FormControlLabel, Checkbox } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import AddIcon from '@material-ui/icons/Add';
 import Transaction from "../components/Transaction"
-import { getAutoCompleteResults, getCardByName } from "../functions/Scryfall"
 import foilOverlay from "../images/foilOverlay.png"
 import TransactionTable from '../components/TransactionTable';
 
@@ -63,7 +68,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Transactions() {
     const classes = useStyles();
-    const [transactions, setTransactions] = useState(transactionData.transactions)
+
+    const [transactions, setTransactions] = useState(null)
     const [newTransaction, setNewTransaction] = useState(false)
     const [autocompleteResults, setAutocompleteResults] = useState([])
     const [currentQuery, setCurrentQuery] = useState(null)
@@ -71,17 +77,33 @@ export default function Transactions() {
 
     const [added, setAdded] = useState(true)
     const [printing, setPrinting] = useState('')
-    const [isFoil, setIsFoil] = useState(false)
+    const [foil, setFoil] = useState(false)
     const [quantity, setQuantity] = useState(1)
     const [price, setPrice] = useState(0)
 
     const [cards, setCards] = useState([])
 
+    let db = firebase.firestore()
+
+    useEffect(() => {
+        //listen for new changes
+        const dbTrans = db.collection("users/" + auth.W + "/transactions").orderBy("datetime", "desc")
+        dbTrans.onSnapshot((qS) => {
+            let items = []
+            qS.forEach((doc) => {
+                items.push(doc.data())
+            })
+            items.sort((a,b)=>b.datetime - a.datetime)
+            console.log(items)
+            setTransactions(items)
+        })
+    },[])
+
     //if the printing updates, update the foil and price info
     useEffect(() => {
         if(printing !== "") {
             console.log(printing)
-            setIsFoil(!printing.nonfoil)
+            setFoil(!printing.nonfoil)
             if(!printing.nonfoil) {
                 setPrice(printing.prices.usd_foil)
             } else {
@@ -92,13 +114,13 @@ export default function Transactions() {
 
     useEffect(() => {
         if(printing !== "") {
-            if(isFoil) {
+            if(foil) {
                 setPrice(printing.prices.usd_foil)
             } else {
                 setPrice(printing.prices.usd)
             }   
         }
-    },[isFoil])
+    },[foil])
 
     return (
         <PageWrapper>
@@ -146,12 +168,11 @@ export default function Transactions() {
                                     <Grid>
                                         <Typography variant="h5" component="h2">
                                             {printing.name}
-                                            {console.log(selectedCardInfo)}
                                         </Typography>
                                         <Grid container direction="row">
                                             <Grid lg={6} md={6} xs={12}>
                                             <div className={classes.foilwrapper}>
-                                                {isFoil && <img src={foilOverlay} className={classes.foilOverlay} alt="foiloverlay"></img>}
+                                                {foil && <img src={foilOverlay} className={classes.foilOverlay} alt="foiloverlay"></img>}
                                                 <img src={printing.image_uris.normal} className={classes.media} alt="selected card"></img>
                                             </div>
                                             </Grid>
@@ -199,8 +220,8 @@ export default function Transactions() {
                                                     >                                
                                                 </TextField>
                                                 <FormControlLabel
-                                                    control={<Checkbox checked={isFoil} onChange={()=>{    
-                                                        setIsFoil(!isFoil)
+                                                    control={<Checkbox checked={foil} onChange={()=>{    
+                                                        setFoil(!foil)
                                                     }} 
                                                     name="foil" />}
                                                     label="Foil?"
@@ -211,7 +232,7 @@ export default function Transactions() {
                                                         printingInfo: printing,
                                                         quantity: quantity,
                                                         price: price,
-                                                        foil: isFoil
+                                                        foil: foil
                                                     }       
                                                     setCards([...cards, entry])
                                                 }}>Add Card</Button>
@@ -224,6 +245,27 @@ export default function Transactions() {
                                 {cards.length > 0 && <div>
                                     <Typography variant="h5" component="h2">Cards Changed</Typography>
                                     <TransactionTable data={cards}></TransactionTable>
+                                    <Button onClick={()=>{
+                                        let cardsAdded = []
+                                        cards.forEach((card)=>{
+                                            let newFormat = {
+                                                id: card.printingInfo.id,
+                                                foil: card.foil,
+                                                price: card.price,
+                                                quantity: card.quantity
+                                            }
+                                            cardsAdded.push(newFormat)
+                                        })
+
+                                        let date = new Date()
+                                        let data = {
+                                            cardsAdded: cardsAdded,
+                                            title: "Test Transaction",
+                                            type: "Buy",
+                                            datetime: Math.floor(date.getTime()/1000)
+                                        }
+                                        addTransaction(db, data, auth.W)
+                                    }}>Create Transaction</Button>
                                 </div>}
                             </Grid>
                         </Grid>
@@ -237,7 +279,7 @@ export default function Transactions() {
                 </Typography>
             </Grid>
             <Grid item xs={12} id="pasttransactions" className={classes.pastTransactions}>
-                {transactions.map((transaction) => {
+                {transactions !== null && transactions.map((transaction) => {
                     return <Transaction data={transaction}></Transaction>
                 })}
             </Grid>
