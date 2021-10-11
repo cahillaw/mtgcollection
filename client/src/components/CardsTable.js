@@ -46,18 +46,18 @@ export default function CardsTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {collectionData !== "" && collectionData.data.map((card, index) => (
-            <TableRow key={card.name} className={index%2 === 1 ? classes.row : classes.oddRow}>
+          {collectionData !== "" && collectionData.map((card, index) => (
+            <TableRow key={index} className={index%2 === 1 ? classes.row : classes.oddRow}>
               <TableCell component="th" scope="row">
-                <CardImagePopover name={card.name} imageSrc={card.image_uris.normal}></CardImagePopover>
+                <CardImagePopover name={card.printingInfo.name} imageSrc={card.printingInfo.image_uris.normal}></CardImagePopover>
               </TableCell>
-              <TableCell align="right">{card.set}</TableCell>
-              <TableCell align="right">{card.prices.usd}</TableCell>
+              <TableCell align="right">{card.printingInfo.set}</TableCell>
+              <TableCell align="right">{card.printingInfo.prices.usd}</TableCell>
               <TableCell align="right">+2.21%</TableCell>
               <TableCell align="right">+4.41%</TableCell>
-              <TableCell align="right">42.20</TableCell>
+              <TableCell align="right">{card.price}</TableCell>
               <TableCell align="right">+20%</TableCell>
-              <TableCell align="right">6/25/20</TableCell>
+              <TableCell align="right">{card.transaction.transactionDate}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
-import { Grid, makeStyles, Button, Card, CardContent, Typography, CardMedia } from '@material-ui/core'
+import React, { useState, useEffect } from 'react'
+import firebase from "../firebase"
+import "firebase/firestore"
 
 import { useAuth } from "../contexts/AuthContext"
+import { getBulkCards } from '../functions/Scryfall'
+
+import { Grid, makeStyles, Button, Card, CardContent, Typography, CardMedia } from '@material-ui/core'
+
 
 import NavBar from "../components/NavBar"
 import CollectionPriceHistory from "../components/CollectionPriceHistory"
@@ -35,37 +40,46 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Portfolio() {
     const { currentUser } = useAuth()
+    let db = firebase.firestore()
+
     const classes = useStyles();
-    const [collectionData, setCollectionData] = useState("")
-
-    let testBody = {"identifiers": [{"set":"THB", "name":"Mantle of the wolf"},{"set":"UGL", "name":"Miss Demeanor"},{"set":"M19", "name":"Respeldent Angel"},{"set":"SOI", "name":"Angel of Deliverance"},{"set":"BBD", "name":"Apocalypse Hydra"},{"set":"BFZ", "name":"Barrage Tyrant"},{"set":"RIX", "name":"Form of the Dinosaur"},{"set":"M20", "name":"Riddlemaster Sphinx"},{"set":"EMN", "name":"Mausoleum Wanderer"},{"set":"ORI", "name":"Harbinger of the Tides"}]}
+    const [collectionData, setCollectionData] = useState(null)
 
 
-    const getScryfallData = async (body) => {
-        console.log(body)
-        let url = "https://api.scryfall.com/cards/collection"
-        try {
-            let response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            })
 
-            try {
-                let data = await response.json()
-                console.log(data)
-                setCollectionData(data)
-            } catch (error) {
-                console.log(error)
-            }
+    useEffect(() => {
+            //listen for new changes
+            const cards = db.collection("users/" + currentUser.uid + "/cards").orderBy("transaction.transactionDate", "desc")
+            cards.onSnapshot(async (qS) => {
+                let items = []
+                let scryfallIds = new Set()
 
-        } catch (error) {
-            console.log(error)
-        }
-    }
+                qS.forEach((doc) => {
+                    let card = doc.data()
+                    items.push(card)
+                    scryfallIds.add(card.id)
+                })
+
+                console.log(items)
+
+                let data = await getBulkCards([...scryfallIds])
+                
+                let scryfallMap = new Map()
+                data.data.forEach((card) => {
+                    if(!scryfallMap.has(card.id)) {
+                        scryfallMap.set(card.id, card)
+                    }
+                })
     
+    
+                items.forEach((card) => {
+                    card.printingInfo = scryfallMap.get(card.id)
+                })
+                console.log(items)
+                setCollectionData(items)
+
+            })   
+    },[])
 
     return (
         <div>
@@ -91,16 +105,14 @@ export default function Portfolio() {
                     </Grid>
                 </Grid>
                 <Grid item xs={12} id="profile">items
-                    <Button onClick={()=>{getScryfallData(testBody)}}>Click me!@</Button>
-                    {collectionData !== "" ? 
-                        <Grid container direction = "row" spacing={1}>
-                            {collectionData.data.map((cardData, key) => {
+                    {collectionData && <Grid container direction = "row" spacing={1}>
+                            {collectionData.map((cardData, key) => {
                                 return (
                                     <Grid item key={key}>
                                         <Card>
                                             <CardContent className={classes.cardContent}>
                                                 <CardMedia>
-                                                    <img src={cardData.image_uris.art_crop} className={classes.media} alt="recipe thumbnail"/>
+                                                    <img src={cardData.printingInfo.image_uris.art_crop} className={classes.media} alt="recipe thumbnail"/>
                                                 </CardMedia>
                                             </CardContent>
                                         </Card>
@@ -108,10 +120,10 @@ export default function Portfolio() {
                                 )
                             
                         })}
-                        </Grid> : null}
+                        </Grid>}
                 </Grid>
                 <Grid>
-                    <CardsTable collectionData={collectionData}></CardsTable>
+                    {collectionData && <CardsTable collectionData={collectionData}></CardsTable>}
                 </Grid>
                 <br></br>
                 <br></br>
