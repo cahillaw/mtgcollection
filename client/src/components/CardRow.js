@@ -81,7 +81,7 @@ export default function CardRow({
             setTotalValue(total)
         }
         fetchData()
-    }, data)
+    }, [data])
 
     return (
         <Grid>

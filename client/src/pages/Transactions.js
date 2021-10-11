@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import firebase, { auth } from "../firebase"
 import "firebase/firestore"
 
-import { addTransaction, getTransactions } from '../functions/DbFunctions'
+import { addTransaction, updateCollection } from '../functions/DbFunctions'
 import { getAutoCompleteResults, getCardByName } from "../functions/Scryfall"
 
 import PageWrapper from '../components/PageWrapper'
@@ -154,7 +154,6 @@ export default function Transactions() {
                                         />
                                         <Button className={classes.addSelect} onClick={async (e) => {
                                             e.preventDefault()
-                                            console.log(currentQuery)
                                             //if > 175 printings handle case lol
                                             let response = await getCardByName(currentQuery)
                                             console.log(response.data)
@@ -264,7 +263,7 @@ export default function Transactions() {
                                             type: "Buy",
                                             datetime: Math.floor(date.getTime()/1000)
                                         }
-                                        addTransaction(db, data, auth.W)
+                                        addTransaction(db, data, auth.W, updateCollection)
                                     }}>Create Transaction</Button>
                                 </div>}
                             </Grid>
